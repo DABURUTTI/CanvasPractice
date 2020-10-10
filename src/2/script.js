@@ -13,7 +13,7 @@ function draw() {
 
 class Point {
   
-    Point(x,y,z) {
+    constructor(x,y,z) {
       this.x = x;
       this.y = y;
       this.z = z;
@@ -24,7 +24,7 @@ class Point {
       translate(0, 0,700);
       rotateY(frameCount * 0.001);
       //rotateZ(radians(90));
-      sphere(100);
+      ellipse(this.x,this.y,10,10);
       pop();
       //z += 1;
     }
