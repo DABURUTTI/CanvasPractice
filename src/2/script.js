@@ -16,7 +16,6 @@ function setup() {
       }
     }
 }
-    
 
 function draw() {
   push();
@@ -32,7 +31,6 @@ function draw() {
 
 
 class Point {
-  
     constructor(x,y,z,size,id) {
       this.x_o = x* 100;
       this.y_o = y* 100;
