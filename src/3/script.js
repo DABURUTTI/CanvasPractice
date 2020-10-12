@@ -1,26 +1,42 @@
-var dots = new Array();
-let myFont;
-function preload() {
-  myFont = loadFont('../../Assets/NotoSansJP-Black.otf');
-}
 
+
+var sap = 40;
+
+var dots = new Array();
+//let myFont;
+function preload() {
+ /// myFont = loadFont('../../Assets/NotoSansJP-Black.otf');
+}
+var cntX,cntY;
+var offsetX,offsetY;
 function setup() {
-  createCanvas(document.body.clientWidth,document.documentElement.clientHeight, WEBGL);
-  textFont(myFont);
+  createCanvas(document.body.clientWidth-3,document.documentElement.clientHeight-3, WEBGL);
+ offsetX = document.body.clientWidth/2;
+ offsetY = document.documentElement.clientHeight/2;
+  cntX = Math.floor(document.body.clientWidth / sap);
+  cntY = Math.floor(document.documentElement.clientHeight / sap);
+ // textFont(myFont);
     var num = 0;
-    for(var i = 0; i < 10; i ++){
-      for(var j = 0; j < 10; j++){
-        var b  = new Point(i ,j ,0,50,num);
+    for(var i = 0; i < cntX; i ++){
+      for(var j = 0; j < cntY; j++){
+        var b  = new Point(i ,j ,0,10,num);
         num = num + 1;
         dots.push(b);
       }
     }
 }
 
+// function windowResized(){
+//   setup();
+// }
+
 function draw() {
+  background(
+    255, 188, 31
+    );
   push();
-  translate(-500,-450,-0);
-    background(255);
+  translate(-offsetX,-offsetY,-0);
+
     dots.forEach(Element => {
       Element.update();
       Element.draw();
@@ -32,12 +48,12 @@ function draw() {
 
 class Point {
     constructor(x,y,z,size,id) {
-      this.x_o = x* 100;
-      this.y_o = y* 100;
-      this.z_o = z* 100;
-      this.x = x* 100;
-      this.y = y* 100;
-      this.z = z* 100;
+      this.x_o = x* sap;
+      this.y_o = y* sap;
+      this.z_o = z* sap;
+      this.x = x* sap;
+      this.y = y* sap;
+      this.z = z* sap;
       this.size = size;
       this.id = this.calcID(x,y);
     }
@@ -64,9 +80,9 @@ class Point {
           }
         }
 
-        if(px === 10){
+        if(px === cntX){
           px = py+1;
-          py = 10;
+          py = cntX;
           continue;
         }
 
@@ -78,7 +94,7 @@ class Point {
         
         px ++;
         py --;
-        console.log(px);
+        //console.log(px);
       }
       return num;
       // var num = 1;
@@ -103,16 +119,29 @@ class Point {
     
       //var  value = frameCount % 700;
       var  value = 0;
-       var vector = [this.move_rows(),this.move_circle()];
-       this.x = map(value, 0, 700, vector[0][0], vector[1][0]);
-       this.y = map(value, 0, 700, vector[0][1], vector[1][1]);
-       this.z = map(value, 0, 700, vector[0][2], vector[1][2]);
+       //var vector = [this.move_rows(),this.move_circle()];
+       var vactor = this.move_noise();
+       this.x = vactor[0];
+       this.y = vactor[1];
+       this.z = vactor[2];
+
+    
+      //  this.x = map(value, 0, 700, vector[0][0], vector[1][0]);
+      //  this.y = map(value, 0, 700, vector[0][1], vector[1][1]);
+      //  this.z = map(value, 0, 700, vector[0][2], vector[1][2]);
     }
 
     move_rows(){
       var x = this.x_o;
       var y = this.y_o;
-      var z = sin(radians(frameCount*1 + this.x *0.1 + this.y*0.1))*50;
+      var z = sin(radians((frameCount*100 + this.x )*1 + this.y*1))*10;
+      return [x,y,z];
+    }
+
+    move_noise(){
+      var x = this.x_o;
+      var y = this.y_o;
+      var z = noise((this.x + frameCount*1)*0.0005, this.y*0.0005,100) * 500;
       return [x,y,z];
     }
 
@@ -127,16 +156,17 @@ class Point {
 
     draw() {
       noStroke();
-      fill(84, 165, 227,this.id);
+      //fill(255, 74, 71,this.z);
+      fill(46, 46, 46);
       push();
       //translate( map(this.x, 0, 100, -960, 960),  map(this.y, 0, 100, -540, 540),this.z);
       translate( this.x,this.y,this.z);
       
       //rotateY(frameCount * 0.1);
       //rotateZ(radians(90));
-      ellipse(0,0,this.size,this.size);
+      ellipse(0,0,this.z * 0.05,this.z*0.05);
       fill(0);
-      text(this.id,-3,3);
+     // text(this.z,-3,3);
       pop();
     }
   }

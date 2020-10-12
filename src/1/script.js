@@ -4,12 +4,11 @@ function setup() {
     createCanvas(document.body.clientWidth,document.documentElement.clientHeight, WEBGL);
     b  = new Point(0,0, 600);
 }
-    
 
 function draw() {
     background(255);
     b.draw();
- }
+}
 
 class Point {
   
