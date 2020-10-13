@@ -3,9 +3,9 @@
 var sap = 40;
 
 var dots = new Array();
-//let myFont;
+let myFont;
 function preload() {
- /// myFont = loadFont('../../Assets/NotoSansJP-Black.otf');
+  myFont = loadFont('../../Assets/NotoSansJP-Black.otf');
 }
 var cntX,cntY;
 var offsetX,offsetY;
@@ -13,9 +13,11 @@ function setup() {
   createCanvas(document.body.clientWidth-3,document.documentElement.clientHeight-3, WEBGL);
  offsetX = document.body.clientWidth/2;
  offsetY = document.documentElement.clientHeight/2;
+//  offsetX = 0;
+//  offsetY = 0;
   cntX = Math.floor(document.body.clientWidth / sap);
   cntY = Math.floor(document.documentElement.clientHeight / sap);
- // textFont(myFont);
+  textFont(myFont);
     var num = 0;
     for(var i = 0; i < cntX; i ++){
       for(var j = 0; j < cntY; j++){
@@ -31,12 +33,15 @@ function setup() {
 // }
 
 function draw() {
-  background(
-    255, 188, 31
-    );
+  background(240);
   push();
-  translate(-offsetX,-offsetY,-0);
 
+  //rotateY(radians(frameCount*0.1));
+  // rotateZ(radians(-40));
+  //rotateX(radians(frameCount*0.1));
+  translate(-offsetX,-offsetY,0);
+  //rotateZ(radians(-10));
+  //translate(-100,300,00);
     dots.forEach(Element => {
       Element.update();
       Element.draw();
@@ -55,7 +60,8 @@ class Point {
       this.y = y* sap;
       this.z = z* sap;
       this.size = size;
-      this.id = this.calcID(x,y);
+      //this.id = this.calcID(x,y);
+      this.id = id;
     }
 
     calcID(x,y){
@@ -75,15 +81,18 @@ class Point {
       while(true){
         num = num + 1;
         if(px === x){
-          if(py == y){
+          if(py === y){
             break;
           }
         }
 
-        if(px === cntX){
-          px = py+1;
-          py = cntX;
-          continue;
+        if(py === 1){
+          if(px >= cntY){
+            px = px-cntY + 2;
+            py = cntX;
+            continue;
+          }
+
         }
 
         if(py === 1){
@@ -141,7 +150,7 @@ class Point {
     move_noise(){
       var x = this.x_o;
       var y = this.y_o;
-      var z = noise((this.x + frameCount*1)*0.0005, this.y*0.0005,100) * 500;
+      var z = noise((this.x + frameCount*10)*0.0005, this.y*0.0005,100) * 800;
       return [x,y,z];
     }
 
@@ -157,16 +166,17 @@ class Point {
     draw() {
       noStroke();
       //fill(255, 74, 71,this.z);
-      fill(46, 46, 46);
+      fill(80);
       push();
+            //rotateY(frameCount * 0.1);
       //translate( map(this.x, 0, 100, -960, 960),  map(this.y, 0, 100, -540, 540),this.z);
       translate( this.x,this.y,this.z);
       
       //rotateY(frameCount * 0.1);
       //rotateZ(radians(90));
-      ellipse(0,0,this.z * 0.05,this.z*0.05);
-      fill(0);
-     // text(this.z,-3,3);
+      ellipse(0,0,this.size,this.size);
+      fill(240);
+      //text(this.id,-3,3);
       pop();
     }
   }
