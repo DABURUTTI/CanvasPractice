@@ -99,6 +99,7 @@ class Point {
     //   this.size = size;
     // }
 
+    
     update() {
     
       //var  value = frameCount % 700;
